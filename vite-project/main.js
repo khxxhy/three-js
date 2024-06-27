@@ -1,5 +1,7 @@
 import "./style.css";
 import * as THREE from "three";
+import vertex from "./shaders/vertex.glsl";
+import fragment from "./shaders/fragment.glsl";
 
 class Site {
   constructor({ dom }) {
@@ -29,7 +31,7 @@ class Site {
     });
     this.renderer.setSize(this.width, this.height);
     this.container.appendChild(this.renderer.domElement);
-    this.renderer.render(tis.scene, this.camera);
+    this.renderer.render(this.scene, this.camera);
 
     this.addImages();
     this.render();

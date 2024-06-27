@@ -1,6 +1,8 @@
-uniform Sampler 2D uImage;
-varying vec2 vUv;
+// fragment.glsl
+uniform sampler2D uImage;
 
 void main() {
-gl_FragColor = texture2D(uImage, vUv); 
+    vec2 uv = vec2(gl_FragCoord.x / resolution.x, gl_FragCoord.y / resolution.y);
+    vec4 texColor = texture2D(uImage, uv);
+    gl_FragColor = texColor;
 }

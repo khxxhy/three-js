@@ -1,4 +1,4 @@
-import glsl from "vite-plugin-gls";
+import glsl from "vite-plugin-glsl";
 import { defineConfig } from "vite";
 
 export default defineConfig({

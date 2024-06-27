@@ -1,4 +1,3 @@
-
 import "./style.css";
 import * as THREE from "three";
 
@@ -8,7 +7,7 @@ class Site {
     this.container = dom;
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.images = [...document.querySelectorAll('.images img')];
+    this.images = [...document.querySelectorAll(".images img")];
     this.material;
     this.imageStore = [];
     this.uStartIndex = 0;
@@ -18,35 +17,62 @@ class Site {
     this.camera = new THREE.PerspectiveCamera(
       75,
       this.width / this.height,
-      0.1,
-      1000
+      100,
+      2000
     );
-    this.camera.position.z = 5;
-    
+    this.camera.position.z = 200;
+    this.camera.fov = 2 * Math.atan(this.height / 2 / 200) * (180 / Math.PI);
+
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
     });
     this.renderer.setSize(this.width, this.height);
     this.container.appendChild(this.renderer.domElement);
+    this.renderer.render(tis.scene, this.camera);
 
-    this.addObjects();
+    this.addImages();
     this.render();
+  }
+  addImages() {
+    const textureLoader = new THREE.TextureLoader();
+    const textures = this.images.map((img) => textureLoader.load(img));
+
+    const uniforms = {
+      uTime: { value: 0 },
+      uImage: { value: textures[0] },
+    };
+
+    this.material = new THREE.ShaderMaterial({
+      uniforms: uniforms,
+      vertexShader: vertex,
+      fragmentShader: fragment,
+      transparent: true,
+    });
+
+    this.images.forEach((img) => {
+      const bounds = img.getBoundingClientRect();
+      const geometry = new THREE.PlaneGeometry(bounds.width, bounds.height);
+      const mesh = new THREE.Mesh(geometry, this.material);
+
+      this.scene.add(mesh);
+
+      this.imageStore.push({
+        mesh: mesh,
+        img: img,
+        top: bounds.top,
+        left: bounds.left,
+        height: bounds.height,
+        width: bounds.width,
+    });
+    });
   }
   render() {
     this.time++;
-    this.cube.rotation.x += 0.01;
-    this.cube.rotation.y += 0.01;
     this.renderer.render(this.scene, this.camera);
     window.requestAnimationFrame(this.render.bind(this));
   }
-  addObjects() {
-    this.geometry = new THREE.BoxGeometry(1, 1, 1);
-    this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true});
-    this.cube = new THREE.Mesh(this.geometry, this.material);
-    this.scene.add(this.cube);
-  }
 }
 new Site({
-  dom: document.querySelector('.canvas'),
+  dom: document.querySelector(".canvas"),
 });

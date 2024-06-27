@@ -8,7 +8,7 @@ class Site {
     this.container = dom;
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.images = [...document.querySelector('.images img')];
+    this.images = [...document.querySelectorAll('.images img')];
     this.material;
     this.imageStore = [];
     this.uStartIndex = 0;
@@ -22,6 +22,7 @@ class Site {
       1000
     );
     this.camera.position.z = 5;
+    
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,

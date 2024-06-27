@@ -1,4 +1,4 @@
-import { document } from "postcss";
+
 import "./style.css";
 import * as THREE from "three";
 
@@ -8,7 +8,7 @@ class Site {
     this.container = dom;
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.images = [...document.querySelector(".images img")];
+    this.images = [...document.querySelector('.images img')];
     this.material;
     this.imageStore = [];
     this.uStartIndex = 0;
@@ -21,23 +21,31 @@ class Site {
       0.1,
       1000
     );
-
+    this.camera.position.z = 5;
     this.renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true,
-
-     } );
+      antialias: true,
+      alpha: true,
+    });
     this.renderer.setSize(this.width, this.height);
-    this .container.appendChild(this.renderer.domElement);
+    this.container.appendChild(this.renderer.domElement);
 
+    this.addObjects();
     this.render();
   }
   render() {
     this.time++;
-    console.log(this.time);
+    this.cube.rotation.x += 0.01;
+    this.cube.rotation.y += 0.01;
+    this.renderer.render(this.scene, this.camera);
     window.requestAnimationFrame(this.render.bind(this));
+  }
+  addObjects() {
+    this.geometry = new THREE.BoxGeometry(1, 1, 1);
+    this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true});
+    this.cube = new THREE.Mesh(this.geometry, this.material);
+    this.scene.add(this.cube);
   }
 }
 new Site({
-  dom: document.querySelector(".canvas"),
+  dom: document.querySelector('.canvas'),
 });

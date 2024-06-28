@@ -29,6 +29,7 @@ class Site {
       antialias: true,
       alpha: true,
     });
+    
     this.renderer.setSize(this.width, this.height);
     this.container.appendChild(this.renderer.domElement);
     this.renderer.render(this.scene, this.camera);
@@ -78,3 +79,4 @@ class Site {
 new Site({
   dom: document.querySelector(".canvas"),
 });
+d
